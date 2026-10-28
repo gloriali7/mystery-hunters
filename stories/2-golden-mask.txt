@@ -1,0 +1,165 @@
+// Mystery Hunters story file. Lines starting with // are notes to yourself and are ignored.
+// See README.md for how this format works.
+
+TITLE: The Pharaoh's Golden Mask
+COVER: museum
+START: arrive
+GAMEOVER: The real mask is gone for good, and so is your badge.
+
+CLUE: PAINT = The mask was painted, not gold
+CLUE: POLICY = Insurance tripled last week
+CLUE: BADGE = Vance's badge used at 11:42
+
+
+// ---------------- Arrival ----------------
+
+SCENE: arrive
+ART: museum
+Sirens wail outside the City Museum. During tonight's gala, the Pharaoh's Golden Mask
+vanished from its glass case. The doors were locked at eleven, so the thief is still inside.
+> Head inside -> hall
+> Grab a snack from the gala buffet first -> buffet (bad)
+
+SCENE: buffet
+ART: museum
+You spend ten minutes choosing between shrimp puffs and tiny quiches.
+The Chief is not impressed. Neither are the quiches.
+> Head inside -> hall
+
+
+// ---------------- The hub ----------------
+
+SCENE: hall
+ART: gallery
+The Egyptian Hall. An empty glass case glows under a spotlight. The night guard,
+the curator and a young intern are all still in the building. Where to?
+> Examine the empty case -> case
+> Visit the security room -> security
+> Visit the curator's office -> office
+> Search the basement storage -> storage
+> Gather the suspects -> accuse
+
+
+// ---------------- The empty case ----------------
+
+SCENE: case
+ART: gallery
+The case was opened with a key, not smashed. Tiny gold flakes glitter on the floor beneath it.
+> Look closely at a flake -> flake (gives PAINT)
+> Pocket a flake. Finders keepers! -> pocket (bad)
+> Back to the hall -> hall
+
+SCENE: flake
+ART: gallery
+Under your magnifying glass, the 'gold' peels like cheap paint. Real gold doesn't flake.
+The mask in this case was a FAKE all along!
+> Back to the case -> case
+
+SCENE: pocket
+ART: gallery
+The curator gasps. 'That is EVIDENCE, detective!'
+You sheepishly hand it back. Everyone saw that.
+> Back to the case -> case
+
+
+// ---------------- Security room ----------------
+
+SCENE: security
+ART: security
+Officer Bruno snores in front of a wall of monitors. A half-eaten donut rests on his chest.
+> Gently wake him up -> bruno (gives BADGE)
+> Blast the fire alarm to wake him! -> alarm (bad)
+> Back to the hall -> hall
+
+SCENE: bruno
+ART: security
+'I wasn't sleeping! I was resting my eyes.' He checks the door log.
+'Only one badge opened the hall after closing. Dr. Vance's, at 11:42.'
+> Back to the security room -> security
+
+SCENE: alarm
+ART: security
+Sprinklers burst on. Priceless paintings get soaked. Bruno wakes up screaming.
+The Chief will be hearing about this.
+> Back to the hall -> hall
+
+
+// ---------------- Curator's office ----------------
+
+SCENE: office
+ART: office
+Dr. Vance the curator paces her office. 'A catastrophe! That mask is irreplaceable!'
+Papers are stacked high on her desk.
+> Glance at the papers on the desk -> policy (gives POLICY)
+> Ask her who she thinks did it -> hunch (bad)
+> Back to the hall -> hall
+
+SCENE: policy
+ART: office
+An insurance policy for the Golden Mask. The payout was TRIPLED just last week,
+signed by Dr. Vance herself.
+> Back to the office -> office
+
+SCENE: hunch
+ART: office
+'Obviously the intern,' she snaps. You spend twenty minutes chasing her hunch
+around the gift shop. Nothing. Why trust a suspect's advice?
+> Back to the office -> office
+
+
+// ---------------- Basement storage ----------------
+
+SCENE: storage
+ART: storage
+The basement is crowded with crates. Pip the intern jumps and hides a phone
+behind her back. 'I, um, wasn't doing anything!'
+> Ask to see the phone -> phone
+> She's hiding something. Arrest her! -> arrestpip (bad)
+> Back to the hall -> hall
+
+SCENE: phone
+ART: storage
+Pip blushes. She was sneaking selfies with the mummy, which is against the rules.
+One photo from 11:45 shows Dr. Vance hurrying upstairs with a heavy bag.
+> Back to the storage room -> storage
+
+SCENE: arrestpip
+ART: storage
+'For taking selfies?!' Pip wails. Her photos prove she was down here all night.
+You've arrested the wrong person.
+> Back to the storage room -> storage
+
+
+// ---------------- The accusation ----------------
+
+SCENE: accuse
+ART: museumlineup
+The suspects gather in the Egyptian Hall. Bruno yawns. Pip fidgets.
+Dr. Vance taps her foot. Who took the Golden Mask?
+> Officer Bruno, the guard -> wrongbruno (bad)
+> Pip, the intern -> wrongpip (bad)
+> Dr. Vance, the curator -> win (needs PAINT POLICY BADGE, else noproof)
+> Not yet. Keep investigating. -> hall
+
+SCENE: wrongbruno
+ART: museumlineup
+'I was asleep!' Bruno protests. The camera footage agrees: nine straight hours of snoring. Wrong!
+> Back to the hall -> hall
+
+SCENE: wrongpip
+ART: museumlineup
+Pip holds up her phone. Two hundred mummy selfies, all timestamped.
+She never left the basement. Wrong!
+> Back to the hall -> hall
+
+SCENE: noproof
+ART: museumlineup
+Dr. Vance laughs coldly. 'On what evidence, detective?'
+You don't have enough. Not yet.
+> Back to the hall -> hall
+
+SCENE: win
+ART: mask
+ENDING: win
+The case held a painted fake. Vance's badge opened the hall at 11:42, and she tripled
+the insurance last week. She swapped the real mask months ago. It's found in her car trunk.

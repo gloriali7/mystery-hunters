@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mystery Hunters</title>
+    <style>
+        html, body { margin: 0; height: 100%; background: #000; color: #fff; font-family: monospace; }
+        #game { width: 100vw; height: 100vh; }
+        #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    </style>
+    <script src="https://cjrtnc.leaningtech.com/4.2/loader.js"></script>
+</head>
+<body>
+    <div id="loading">Loading Mystery Hunters...</div>
+    <div id="game"></div>
+    <script>
+        // Sound.java makes each sound effect as 16-bit samples at 44100 Hz and hands
+        // it to these functions, which play it with the browser's Web Audio.
+        const RATE = 44100;
+        let audio = null;
+        let playing = [];
+        let endTime = 0;
+
+        function startAudio() {
+            if (!audio) {
+                audio = new AudioContext();
+            }
+            // Browsers keep sound paused until the player clicks or presses a key.
+            if (audio.state === "suspended") {
+                audio.resume();
+            }
+        }
+        document.addEventListener("pointerdown", startAudio);
+        document.addEventListener("keydown", startAudio);
+
+        function stopAll() {
+            for (const source of playing) {
+                source.stop();
+            }
+            playing = [];
+            endTime = 0;
+        }
+
+        async function Java_Sound_webPlay(lib, clip, afterCurrent) {
+            startAudio();
+            if (audio.state !== "running") {
+                return; // Skip sounds from before the first click, instead of saving them all up.
+            }
+            const samples = clip.length / 2;
+            const buffer = audio.createBuffer(1, samples, RATE);
+            const channel = buffer.getChannelData(0);
+            for (let i = 0; i < samples; i++) {
+                channel[i] = ((clip[2 * i] & 0xff) | (clip[2 * i + 1] << 8)) / 32768;
+            }
+            if (!afterCurrent) {
+                stopAll();
+            }
+            const source = audio.createBufferSource();
+            source.buffer = buffer;
+            source.connect(audio.destination);
+            const start = Math.max(audio.currentTime, endTime);
+            source.start(start);
+            endTime = start + buffer.duration;
+            playing.push(source);
+            source.onended = () => { playing = playing.filter(s => s !== source); };
+        }
+
+        async function Java_Sound_webStop(lib) {
+            stopAll();
+        }
+
+        (async () => {
+            await cheerpjInit({
+                // Saves go in /files, which CheerpJ keeps in the browser between visits.
+                javaProperties: ["user.home=/files", "mysteryhunters.web=true"],
+                natives: { Java_Sound_webPlay, Java_Sound_webStop },
+            });
+            cheerpjCreateDisplay(-1, -1, document.getElementById("game"));
+            document.getElementById("loading").remove();
+            // /app/ is the folder this page is served from.
+            await cheerpjRunJar("/app/mystery-hunters.jar");
+        })();
+    </script>
+</body>
+</html>

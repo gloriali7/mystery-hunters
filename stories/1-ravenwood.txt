@@ -1,0 +1,166 @@
+// Mystery Hunters story file. Lines starting with // are notes to yourself and are ignored.
+// See README.md for how this format works.
+
+TITLE: The Ravenwood Emerald
+COVER: manor
+START: intro
+GAMEOVER: The thief slipped away into the storm.
+
+CLUE: LACE = White lace from the safe
+CLUE: CODE = Only family knows the code
+CLUE: TICKET = Lily's pawn shop ticket
+
+
+// ---------------- Arrival ----------------
+
+SCENE: intro
+ART: manor
+Midnight. A storm batters Ravenwood Manor. Lady Ravenwood's priceless emerald has vanished
+and the roads are flooded, so whoever took it is still inside. You are the detective on call.
+> Knock on the front door -> foyer
+> Too wet. Go home and sleep. -> gohome (bad)
+
+SCENE: gohome
+ART: manor
+The Chief calls before you even reach your car. 'Get back there, detective!'
+You trudge back through the rain, soaked and embarrassed.
+> Knock on the front door -> foyer
+
+
+// ---------------- The hub: every room branches off from here ----------------
+
+SCENE: foyer
+ART: foyer
+The grand foyer. The butler, the gardener and Lady Ravenwood's niece are somewhere
+in the house. Where will you look?
+> Search the study -> study
+> Visit the kitchen -> kitchen
+> Check the greenhouse -> garden
+> Knock on the guest room -> guestroom
+> Gather the suspects -> accuse
+
+
+// ---------------- Study ----------------
+
+SCENE: study
+ART: study
+The safe hangs open. No scratches, so the thief knew the code.
+The window is smashed, but the broken glass lies outside on the lawn.
+> Inspect the safe door -> safe (gives LACE)
+> A burglar broke in through the window! -> burglar (bad)
+> Back to the foyer -> foyer
+
+SCENE: safe
+ART: study
+Snagged on the hinge is a scrap of fine white lace, the kind sewn onto a lady's glove.
+You bag it as evidence.
+> Back to the study -> study
+
+SCENE: burglar
+ART: study
+The inspector raises an eyebrow. 'Glass on the lawn means the window was broken from INSIDE.'
+Someone wanted this to look like a break-in.
+> Back to the study -> study
+
+
+// ---------------- Kitchen ----------------
+
+SCENE: kitchen
+ART: kitchen
+Mr. Graves the butler is polishing silver. 'I served dinner until midnight, detective.
+The cook can vouch for me.'
+> Ask who knows the safe code -> code (gives CODE)
+> Arrest him! The butler always did it. -> butlerangry (bad)
+> Back to the foyer -> foyer
+
+SCENE: code
+ART: kitchen
+'Only family knows that code, sir. Lady Ravenwood... and her niece, Miss Lily.
+She only arrived yesterday.'
+> Back to the kitchen -> kitchen
+
+SCENE: butlerangry
+ART: kitchen
+Graves drops a silver platter with a CRASH. 'I have served this family for thirty years!'
+The cook confirms his alibi. Oops.
+> Back to the kitchen -> kitchen
+
+
+// ---------------- Garden ----------------
+
+SCENE: garden
+ART: garden
+Mr. Thorne the gardener is sheltering from the rain. His boots are caked with thick mud.
+> That mud proves he did it! -> mud (bad)
+> Ask what he saw tonight -> thorne
+> Back to the foyer -> foyer
+
+SCENE: mud
+ART: garden
+'I'm a gardener. It's raining,' Thorne says flatly. Fair point. Your confidence takes a hit.
+> Back to the garden -> garden
+
+SCENE: thorne
+ART: garden
+'Saw a candle in the guest room window around midnight.
+Someone was packing in an awful hurry.'
+> Back to the garden -> garden
+
+
+// ---------------- Guest room ----------------
+
+SCENE: guestroom
+ART: guestroom
+Miss Lily smiles a little too quickly. 'My poor aunt! I slept through the whole thing.'
+A red coat hangs by the door. A suitcase sits packed.
+> Search the coat pockets -> coat (gives TICKET)
+> Take her word for it -> trusted (bad)
+> Back to the foyer -> foyer
+
+SCENE: coat
+ART: guestroom
+Inside: a pawn shop ticket dated for tomorrow morning, and a single white lace glove.
+Its twin is missing.
+> Back to the guest room -> guestroom
+
+SCENE: trusted
+ART: guestroom
+You apologise and leave. Behind you, a suitcase latch clicks shut.
+Something tells you that was a mistake.
+> Back to the foyer -> foyer
+
+
+// ---------------- The accusation ----------------
+
+SCENE: accuse
+ART: lineup
+Everyone gathers in the foyer as thunder shakes the chandelier.
+All eyes are on you. Who stole the emerald?
+> Mr. Graves, the butler -> wronggraves (bad)
+> Mr. Thorne, the gardener -> wrongthorne (bad)
+> Miss Lily, the niece -> win (needs LACE CODE TICKET, else noproof)
+> Not yet. Keep investigating. -> foyer
+
+SCENE: wronggraves
+ART: lineup
+'Impossible,' says the cook. 'He was with me all evening.'
+Graves glares at you. Somewhere in the room, the real thief smirks.
+> Back to the foyer -> foyer
+
+SCENE: wrongthorne
+ART: lineup
+Thorne holds up his muddy hands. 'I've been repotting tomatoes since supper.'
+The mud was just mud. Wrong!
+> Back to the foyer -> foyer
+
+SCENE: noproof
+ART: lineup
+Lily laughs. 'Accusing family with no proof? How rude.'
+She's right. You need more evidence first.
+> Back to the foyer -> foyer
+
+SCENE: win
+ART: emerald
+ENDING: win
+The lace from the safe. The code only family knew. The pawn ticket for tomorrow.
+Lily's face falls. The emerald is found sewn into the lining of her coat.

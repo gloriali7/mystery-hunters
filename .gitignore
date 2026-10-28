@@ -1,0 +1,5 @@
+bin/
+build/
+web-dist/
+web-dist.zip
+.DS_Store
